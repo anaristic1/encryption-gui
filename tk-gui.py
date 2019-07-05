@@ -63,6 +63,31 @@ def modified(event):
     print(combo.get())
 
 
+def check():
+    global file_path
+    if message2 != "":
+        message2.configure(text="")
+    if file_path == "":
+        message2.configure(fg="red", text="NO FILE CHOSEN!")
+        return False
+    elif combo.get() not in values:
+        message2.configure(fg="red", text="NO ALGORITHM CHOSEN!")
+        return False
+    return True
+
+
+def encrypt_file():
+    pass
+
+
+def decrypt_file():
+    if check() and get_type() == "enc":
+        pass
+    else:
+        message2.configure(fg="red", text="SELECTED TYPE IS NOT ENCRYPTED")
+
+
+
 #  Main GUI elements
 window = tk.Tk()
 window.title("ZRS Projekat")
@@ -81,3 +106,8 @@ combo = Combobox(window, values=values, state='readonly')
 combo.bind('<<ComboboxSelected>>', modified)
 lbl4 = tk.Label(window, font=("Arial", 12), text="Choose an algorithm:")
 empty = tk.Label(window)  # used for better look in GUI
+
+lbl5 = tk.Label(window, font=("Arial", 12), text="Choose encryption/decryption:")
+encrypt_btn = tk.Button(window, text="Encrypt", bg="black", fg="white", command=encrypt_file)
+decrypt_btn = tk.Button(window, text="Decrypt", bg="black", fg="white", command=decrypt_file)
+message2 = tk.Label(window, font=("Arial", 12), text="")

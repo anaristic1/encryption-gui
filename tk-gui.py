@@ -65,26 +65,29 @@ def modified(event):
 
 def check():
     global file_path
-    if message2 != "":
-        message2.configure(text="")
+    if message != "":
+        message.configure(text="")
     if file_path == "":
-        message2.configure(fg="red", text="NO FILE CHOSEN!")
+        message.configure(fg="red", text="NO FILE CHOSEN!")
         return False
     elif combo.get() not in values:
-        message2.configure(fg="red", text="NO ALGORITHM CHOSEN!")
+        message.configure(fg="red", text="NO ALGORITHM CHOSEN!")
         return False
     return True
 
 
 def encrypt_file():
-    pass
+    if check() and get_type() == "enc":
+        pass
+    else:
+        message2.configure(fg="red", text=".enc file selected")
 
 
 def decrypt_file():
     if check() and get_type() == "enc":
         pass
     else:
-        message2.configure(fg="red", text="SELECTED TYPE IS NOT ENCRYPTED")
+        message2.configure(fg="red", text="not .enc file selected")
 
 
 
@@ -111,3 +114,21 @@ lbl5 = tk.Label(window, font=("Arial", 12), text="Choose encryption/decryption:"
 encrypt_btn = tk.Button(window, text="Encrypt", bg="black", fg="white", command=encrypt_file)
 decrypt_btn = tk.Button(window, text="Decrypt", bg="black", fg="white", command=decrypt_file)
 message2 = tk.Label(window, font=("Arial", 12), text="")
+
+
+#  Main GUI grid
+lbl1.grid(column=0, row=0, padx=10)
+lbl2.grid(column=1, row=0)
+lbl3.grid(column=2, row=0)
+open_file_btn.grid(column=0, row=1)
+write_text_btn.grid(column=2,row=1)
+message.grid(column=1, row=2)
+lbl4.grid(column=1, row=3)
+combo.grid(column=1, row=4)
+empty.grid(column=1, row=5)
+lbl5.grid(column=0, row=6)
+encrypt_btn.grid(column=1, row=6, pady=10)
+decrypt_btn.grid(column=2, row=6)
+message2.grid(column=1, row=7)
+
+window.mainloop()

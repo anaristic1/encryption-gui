@@ -5,7 +5,7 @@ from tkinter.ttk import Combobox
 from tkinter.filedialog import askopenfilename
 from cryptography import encrypt_aes,encrypt_salsa20
 from Crypto.Random import get_random_bytes
-
+from database import get_specific_rows
 file_path = ""
 
 
@@ -99,7 +99,19 @@ def decrypt_file():
        return
    else:
        try:
-           pass
+           decrypt_window = tk.Toplevel(window)
+           decrypt_window.grab_set()
+           decrypt_window.title("Decrypt")
+           decrypt_window.resizable(width=False, height=False)
+           rows = get_specific_rows(file_path, str(combo.get()))
+           for row in rows:
+               print(row)
+           # txt = Text(new_window, width=30, height=5)
+           # ok_btn = tk.Button(new_window, text="Ok", command=retrieve_input)
+           # ok_message = tk.Label(new_window)
+           # txt.grid(column=0, row=0)
+           # ok_btn.grid(column=0, row=1)
+           # ok_message.grid(column=0, row=2)
        except Exception:
            pass
 

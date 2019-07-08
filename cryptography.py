@@ -22,7 +22,7 @@ def encrypt_aes(key, path):
     iv = cipher.iv
     cipher_path = path.split(".")[0]+".enc"
     write_binary(cipher_path, data=cipher_bytes)
-    insert(cipher_path,"aes", path.split(".")[1], key, iv)
+    insert(cipher_path,"AES", path.split(".")[1], key, iv)
 
 
 def decrypt_aes(key,iv,cipher_path, filetype):
@@ -45,7 +45,7 @@ def encrypt_salsa20(key, path):
     cipher_bytes = cipher.encrypt(data)
     cipher_path = path.split(".")[0] + ".enc"
     write_binary(cipher_path, data=cipher_bytes)
-    insert(cipher_path,"salsa20", path.split(".")[1], key, nonce)
+    insert(cipher_path,"Salsa20", path.split(".")[1], key, nonce)
 
 
 def decrypt_salsa20(key,nonce,cipher_path, filetype):

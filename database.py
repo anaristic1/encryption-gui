@@ -29,7 +29,7 @@ def insert(path,algorithm, file_type, key, iv):
         cursor = connection.cursor()
         sql_command= f"""
         INSERT INTO data (id,algorithm, path, filetype, key, iv)
-        VALUES(NULL,"{path}","{algorithm}","{file_type}","{key}","{iv}");
+        VALUES(NULL,"{algorithm}","{path}","{file_type}","{key}","{iv}");
         """
         cursor.execute(sql_command)
         connection.commit()
@@ -40,8 +40,16 @@ def insert(path,algorithm, file_type, key, iv):
 
 
 def get_specific_rows(path,algorithm):
-        pass
-
+    try:
+        connection = sql.connect('data.db')
+        cursor = connection.cursor()
+        sql_command= f"""SELECT * FROM data WHERE path="{path}" AND algorithm="{algorithm}" """
+        cursor.execute(sql_command)
+        return cursor.fetchall()
+    except sql.Error as err:
+        print(f"Error: {err.args[0]}")
+    finally:
+        connection.close()
 
 
 def get_all():
@@ -58,4 +66,7 @@ def get_all():
 
 
 if __name__ == '__main__':
-    pass
+    create_database()
+    # rows = get_specific_rows("C:/Users/Ana/Desktop/plain.enc","salsa20")
+    # for row in rows:
+    #     print(row)

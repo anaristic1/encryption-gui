@@ -7,6 +7,7 @@ from tkinter.filedialog import askopenfilename
 
 file_path = ""
 
+
 def get_type():
     return file_path.split(".")[1]
 
@@ -21,15 +22,12 @@ def write_in_txt(text, path):
 
 
 def choose_file():
-    """Chooses file path and creates a class depending on the file type."""
     global file_path
 
-    try:
-        file_path = askopenfilename(filetypes=[("Txt", "*.txt"), ("JPG", "*.jpg"), ("ENC", "*.enc")])
-        message.configure(text=f"File name: {get_name()}"
-                    if len(get_name()) < 30 else f"{get_type()} file chosen")
-    except IndexError:
-        messagebox.showinfo("Error","No file chosen!")
+    file_path = askopenfilename(filetypes=[("Txt", "*.txt"), ("JPG", "*.jpg"), ("ENC", "*.enc")])
+
+    messagebox.showinfo("Error", "No file chosen!") if file_path=="" else message.configure(
+        text=f"Chosen file: {get_name()}" if len(get_name()) < 30 else f"{get_type()} file chosen")
 
 
 def write_text():

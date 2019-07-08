@@ -103,17 +103,14 @@ def decrypt_file():
            decrypt_window.grab_set()
            decrypt_window.title("Decrypt")
            decrypt_window.resizable(width=False, height=False)
-           rows = get_specific_rows(file_path, str(combo.get()))
-           for row in rows:
-               print(row)
-           # txt = Text(new_window, width=30, height=5)
-           # ok_btn = tk.Button(new_window, text="Ok", command=retrieve_input)
-           # ok_message = tk.Label(new_window)
-           # txt.grid(column=0, row=0)
-           # ok_btn.grid(column=0, row=1)
-           # ok_message.grid(column=0, row=2)
-       except Exception:
-           pass
+           row = get_specific_rows(file_path, str(combo.get()))
+           print(row)
+           row_label = tk.Label(decrypt_window,font=("Arial", 12), text="Key:"+row[0][4])
+           row_label2 = tk.Label(decrypt_window, font=("Arial", 12), text="Iv:" + row[0][5])
+           row_label.grid(column=0, row=0)
+           row_label2.grid(column=0, row=1)
+       except Exception as e:
+           print("Error"+e.message)
 
 
 #  Main GUI elements

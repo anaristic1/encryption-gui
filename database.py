@@ -65,8 +65,8 @@ def get_all():
         connection.close()
 
 
-if __name__ == '__main__':
-    create_database()
+# if __name__ == '__main__':
+    # create_database()
     # rows = get_specific_rows("C:/Users/Ana/Desktop/plain.enc","salsa20")
     # for row in rows:
     #     print(row)

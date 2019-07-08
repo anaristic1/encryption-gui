@@ -1,4 +1,4 @@
-from Crypto.Cipher import AES, Salsa20
+from Crypto.Cipher import AES, Salsa20, DES3
 from Crypto.Random import get_random_bytes
 from database import insert
 from base64 import b64decode
@@ -56,6 +56,34 @@ def decrypt_salsa20(key,nonce,cipher_path, filetype):
         data = cipher.decrypt(enc_data)
         path = cipher_path.split(".")[0]+"."+filetype
         write_binary(path,data)
+    except Exception:
+        print("Incorrect decryption")
+
+
+def encrypt_3des(path):
+    data = open_binary(path)
+    while True:
+        try:
+            key = DES3.adjust_key_parity(get_random_bytes(24))
+            break
+        except ValueError:
+            pass
+    cipher = DES3.new(key,DES3.MODE_CFB)
+    cipher_bytes = cipher.encrypt(data)
+    iv = cipher.iv
+    cipher_path = path.split(".")[0] + ".enc"
+    write_binary(cipher_path, data=cipher_bytes)
+    insert(cipher_path, "3DES", path.split(".")[1], key, iv)
+
+
+def decrypt_3des(key,iv,cipher_path, filetype):
+    try:
+        key = b64decode(key)
+        cipher = DES3.new(key, DES3.MODE_CFB, iv=iv)
+        enc_data = open_binary(cipher_path)
+        data = cipher.decrypt(enc_data)
+        path = cipher_path.split(".")[0] + "." + filetype
+        write_binary(path, data)
     except Exception:
         print("Incorrect decryption")
 

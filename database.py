@@ -1,5 +1,5 @@
 import sqlite3 as sql
-
+from base64 import b64encode, b64decode
 
 def create_database():
     try:
@@ -20,13 +20,15 @@ def create_database():
         connection.close()
 
 
-def insert(file_name, file_type, key, iv):
+def insert(path, file_type, key, iv):
     try:
+        key = b64encode(key).decode('utf-8')
+        # iv = b64encode(iv).decode('utf-8')
         connection = sql.connect('data.db')
         cursor = connection.cursor()
         sql_command= f"""
         INSERT INTO data (id, filename, filetype, key, iv)
-        VALUES(NULL,"{file_name}","{file_type}","{key}","{iv}");
+        VALUES(NULL,"{path}","{file_type}","{key}","{iv}");
         """
         cursor.execute(sql_command)
         connection.commit()

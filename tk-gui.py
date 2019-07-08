@@ -3,7 +3,8 @@ from tkinter import Text
 from tkinter import messagebox
 from tkinter.ttk import Combobox
 from tkinter.filedialog import askopenfilename
-
+from cryptography import encrypt_aes,encrypt_salsa20
+from Crypto.Random import get_random_bytes
 
 file_path = ""
 
@@ -26,7 +27,7 @@ def choose_file():
 
     file_path = askopenfilename(filetypes=[("Txt", "*.txt"), ("JPG", "*.jpg"), ("ENC", "*.enc")])
 
-    messagebox.showinfo("Error", "No file chosen!") if file_path=="" else message.configure(
+    messagebox.showinfo("Error", "No file chosen!") if file_path == "" else message.configure(
         text=f"Chosen file: {get_name()}" if len(get_name()) < 30 else f"{get_type()} file chosen")
 
 
@@ -66,27 +67,41 @@ def check():
     if message != "":
         message.configure(text="")
     if file_path == "":
-        message.configure(fg="red", text="NO FILE CHOSEN!")
+        messagebox.showinfo("No file", "No file chosen!")
         return False
     elif combo.get() not in values:
-        message.configure(fg="red", text="NO ALGORITHM CHOSEN!")
+        messagebox.showinfo("No algorithm", "No algorithm chosen!")
         return False
     return True
 
 
 def encrypt_file():
-    if check() and get_type() == "enc":
-        pass
+    global file_path
+
+    def f(x):
+        return {
+            'AES': encrypt_aes(get_random_bytes(16), file_path),
+            'Salsa20': encrypt_salsa20(get_random_bytes(32), file_path),
+        }[x]
+
+    if not check():
+        return
     else:
-        message2.configure(fg="red", text=".enc file selected")
+        if get_type() == "enc":
+            messagebox.showinfo("Wrong type", "Chosen file is .enc type!")
+        else:
+            f(combo.get())
+            messagebox.showinfo("Success!","File was encrypted.")
 
 
 def decrypt_file():
-    if check() and get_type() == "enc":
-        pass
-    else:
-        message2.configure(fg="red", text="not .enc file selected")
-
+   if not check():
+       return
+   else:
+       try:
+           pass
+       except Exception:
+           pass
 
 
 #  Main GUI elements
@@ -102,7 +117,7 @@ lbl3 = tk.Label(window, font=("Arial", 12), text="Write text")
 write_text_btn = tk.Button(window, text="Write", bg="black", fg="white", command=write_text)
 message = tk.Label(window, font=("Arial", 12))
 
-values = ["AES", "3DES", "Twofish"]
+values = ["AES", "3DES", "Salsa20"]
 combo = Combobox(window, values=values, state='readonly')
 combo.bind('<<ComboboxSelected>>', modified)
 lbl4 = tk.Label(window, font=("Arial", 12), text="Choose an algorithm:")

@@ -7,8 +7,9 @@ def create_database():
         cursor = connection.cursor()
         sql_command = """
           CREATE TABLE data(
-          id INTEGER PRIMARY KEY, 
-          filename VARCHAR(50),
+          id INTEGER PRIMARY KEY,
+          algorithm VARCHAR(10),
+          path VARCHAR(50),
           filetype VARCHAR(10),
           key VARCHAR(30),
           iv VARCHAR(50) );
@@ -20,15 +21,15 @@ def create_database():
         connection.close()
 
 
-def insert(path, file_type, key, iv):
+def insert(path,algorithm, file_type, key, iv):
     try:
         key = b64encode(key).decode('utf-8')
         # iv = b64encode(iv).decode('utf-8')
         connection = sql.connect('data.db')
         cursor = connection.cursor()
         sql_command= f"""
-        INSERT INTO data (id, filename, filetype, key, iv)
-        VALUES(NULL,"{path}","{file_type}","{key}","{iv}");
+        INSERT INTO data (id,algorithm, path, filetype, key, iv)
+        VALUES(NULL,"{path}","{algorithm}","{file_type}","{key}","{iv}");
         """
         cursor.execute(sql_command)
         connection.commit()
@@ -36,6 +37,11 @@ def insert(path, file_type, key, iv):
         print(f"Error: {err.args[0]}")
     finally:
         connection.close()
+
+
+def get_specific_rows(path,algorithm):
+        pass
+
 
 
 def get_all():

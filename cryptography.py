@@ -22,7 +22,7 @@ def encrypt_aes(key, path):
     iv = cipher.iv
     cipher_path = path.split(".")[0]+".enc"
     write_binary(cipher_path, data=cipher_bytes)
-    insert(cipher_path, path.split(".")[1], key, iv)
+    insert(cipher_path,"aes", path.split(".")[1], key, iv)
 
 
 def decrypt_aes(key,iv,cipher_path, filetype):
@@ -45,7 +45,7 @@ def encrypt_salsa20(key, path):
     cipher_bytes = cipher.encrypt(data)
     cipher_path = path.split(".")[0] + ".enc"
     write_binary(cipher_path, data=cipher_bytes)
-    insert(cipher_path, path.split(".")[1], key, nonce)
+    insert(cipher_path,"salsa20", path.split(".")[1], key, nonce)
 
 
 def decrypt_salsa20(key,nonce,cipher_path, filetype):
@@ -60,7 +60,7 @@ def decrypt_salsa20(key,nonce,cipher_path, filetype):
         print("Incorrect decryption")
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # encrypt_aes(b"\xech4l\x1f6\x81f}{\x01'\xf1\xea\xf7\x9f", "C:/Users/Ana/Desktop/Git.pdf")
     # decrypt_aes("7Gg0bB82gWZ9ewEn8er3nw==",b'U\xed|\xf9D\x01\xea\x1f\xa08\rP\x00f5g',"C:/Users/Ana/Desktop/Git.enc","pdf")
     # key = b64decode("beV7e/05MCQcohtT312qGA==")
@@ -71,4 +71,4 @@ if __name__ == '__main__':
 
 
     # encrypt_salsa20(get_random_bytes(32), "C:/Users/Ana/Desktop/info.txt")
-    decrypt_salsa20("AUKWKWiAHhEbeFqtzGApfHSg1zT3lRLMqM//0OrKOKA=", b'\xda\xf8\xd62hX\xbb-',"C:/Users/Ana/Desktop/info.enc","txt")
+    # decrypt_salsa20("AUKWKWiAHhEbeFqtzGApfHSg1zT3lRLMqM//0OrKOKA=", b'\xda\xf8\xd62hX\xbb-',"C:/Users/Ana/Desktop/info.enc","txt")

@@ -24,7 +24,7 @@ def create_database():
 def insert(path,algorithm, file_type, key, iv):
     try:
         key = b64encode(key).decode('utf-8')
-        # iv = b64encode(iv).decode('utf-8')
+        iv = b64encode(iv).decode('utf-8')
         connection = sql.connect('data.db')
         cursor = connection.cursor()
         sql_command= f"""

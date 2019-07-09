@@ -3,9 +3,10 @@ from tkinter import Text
 from tkinter import messagebox
 from tkinter.ttk import Combobox
 from tkinter.filedialog import askopenfilename
-from cryptography import encrypt_aes,encrypt_salsa20
+from cryptography import encrypt_aes,encrypt_salsa20,encrypt_3des,decrypt_aes,decrypt_salsa20,decrypt_3des
 from Crypto.Random import get_random_bytes
 from database import get_specific_rows
+from base64 import b64decode
 file_path = ""
 
 
@@ -78,39 +79,55 @@ def check():
 def encrypt_file():
     global file_path
 
-    def f(x):
-        return {
-            'AES': encrypt_aes(get_random_bytes(16), file_path),
-            'Salsa20': encrypt_salsa20(get_random_bytes(32), file_path),
-        }[x]
-
     if not check():
         return
     else:
         if get_type() == "enc":
             messagebox.showinfo("Wrong type", "Chosen file is .enc type!")
         else:
-            f(combo.get())
-            messagebox.showinfo("Success!","File was encrypted.")
+            algorithm = combo.get()
+            if algorithm == 'AES':
+                encrypt_aes(get_random_bytes(16), file_path)
+            elif algorithm == 'Salsa20':
+                encrypt_salsa20(get_random_bytes(32), file_path)
+            elif algorithm == '3DES':
+                encrypt_3des(file_path)
 
 
 def decrypt_file():
-   if not check():
-       return
-   else:
-       try:
-           decrypt_window = tk.Toplevel(window)
-           decrypt_window.grab_set()
-           decrypt_window.title("Decrypt")
-           decrypt_window.resizable(width=False, height=False)
-           row = get_specific_rows(file_path, str(combo.get()))
-           print(row)
-           row_label = tk.Label(decrypt_window,font=("Arial", 12), text="Key:"+row[0][4])
-           row_label2 = tk.Label(decrypt_window, font=("Arial", 12), text="Iv:" + row[0][5])
-           row_label.grid(column=0, row=0)
-           row_label2.grid(column=0, row=1)
-       except Exception as e:
-           print("Error"+e.message)
+    if not check():
+        return
+    else:
+        try:
+            row = get_specific_rows(file_path, combo.get())
+            algorithm = row[0][1]
+            key = row[0][4]
+            iv = row[0][5]
+            cipher_path = row[0][2]
+            filetype = row[0][3]
+            print(type(key), type(iv),type(file_path),type(filetype))
+            if algorithm == 'AES':
+                 decrypt_aes(key,iv,cipher_path,filetype)
+            elif algorithm == 'Salsa20':
+                decrypt_salsa20(key,iv,cipher_path,filetype)
+            elif algorithm == '3DES':
+                decrypt_3des(key,iv,cipher_path,filetype)
+
+            decrypt_window = tk.Toplevel(window)
+            decrypt_window.grab_set()
+            decrypt_window.title("Decrypt")
+            decrypt_window.resizable(width=False, height=False)
+            lbl_row1 = tk.Label(decrypt_window,font=("Arial", 12), text="Key:")
+            text1 = tk.Label(decrypt_window,text=row[0][4])
+            lbl_row2 = tk.Label(decrypt_window, font=("Arial", 12), text="Iv:")
+            text2 = tk.Label(decrypt_window,text=(row[0][5]))
+            lbl_row1.grid(column=0, row=0)
+            text1.grid(column=1, row=0)
+            lbl_row2.grid(column=0, row=1)
+            text2.grid(column=1, row=1)
+            messagebox.showinfo("Success","File was decrypted")
+        except Exception as e:
+            print("Error"+e.message)
 
 
 #  Main GUI elements

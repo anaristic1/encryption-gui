@@ -28,12 +28,13 @@ def encrypt_aes(key, path):
 def decrypt_aes(key,iv,cipher_path, filetype):
     try:
         key = b64decode(key)
+        iv = b64decode(iv)
         enc_data = open_binary(cipher_path)
         cipher = AES.new(key, AES.MODE_CFB, iv=iv)
         data = cipher.decrypt(enc_data)
         path = cipher_path.split(".")[0]+"."+filetype
         write_binary(path,data)
-    except Exception:
+    except Exception as e:
         print("Incorrect decryption")
 
 
@@ -51,6 +52,7 @@ def encrypt_salsa20(key, path):
 def decrypt_salsa20(key,nonce,cipher_path, filetype):
     try:
         key = b64decode(key)
+        nonce = b64decode(nonce)
         enc_data = open_binary(cipher_path)
         cipher = Salsa20.new(key, nonce)
         data = cipher.decrypt(enc_data)
@@ -79,8 +81,9 @@ def encrypt_3des(path):
 def decrypt_3des(key,iv,cipher_path, filetype):
     try:
         key = b64decode(key)
-        cipher = DES3.new(key, DES3.MODE_CFB, iv=iv)
+        iv = b64decode(iv)
         enc_data = open_binary(cipher_path)
+        cipher = DES3.new(key, DES3.MODE_CFB, iv=iv)
         data = cipher.decrypt(enc_data)
         path = cipher_path.split(".")[0] + "." + filetype
         write_binary(path, data)
@@ -88,9 +91,9 @@ def decrypt_3des(key,iv,cipher_path, filetype):
         print("Incorrect decryption")
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # encrypt_aes(b"\xech4l\x1f6\x81f}{\x01'\xf1\xea\xf7\x9f", "C:/Users/Ana/Desktop/Git.pdf")
-    # decrypt_aes("7Gg0bB82gWZ9ewEn8er3nw==",b'U\xed|\xf9D\x01\xea\x1f\xa08\rP\x00f5g',"C:/Users/Ana/Desktop/Git.enc","pdf")
+    # decrypt_aes("5dwkUQDoEPjHgWxIp91eZQ==",b'\xf6>\xf3q\xad\x06\x004\xf8\xd8\xda\xe3\x19\x94Y\xa8',"C:/Users/Ana/Desktop/message.enc","txt")
     # key = b64decode("beV7e/05MCQcohtT312qGA==")
     # print(key)
 
@@ -100,3 +103,5 @@ def decrypt_3des(key,iv,cipher_path, filetype):
 
     # encrypt_salsa20(get_random_bytes(32), "C:/Users/Ana/Desktop/info.txt")
     # decrypt_salsa20("AUKWKWiAHhEbeFqtzGApfHSg1zT3lRLMqM//0OrKOKA=", b'\xda\xf8\xd62hX\xbb-',"C:/Users/Ana/Desktop/info.enc","txt")
+
+    decrypt_3des("0IBh9OmFzYkEkrXyGmieYb+wrWcQp3wv",b'\xdb\x0b\x01_N\x91\x85h',"C:/Users/Ana/Desktop/message.enc","txt")

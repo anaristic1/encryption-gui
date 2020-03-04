@@ -2,7 +2,7 @@ from Crypto.Cipher import AES, Salsa20, DES3
 from Crypto.Random import get_random_bytes
 from database import insert
 from base64 import b64decode
-
+import time
 
 def open_binary(path):
     with open(path, 'rb') as f:
@@ -92,16 +92,34 @@ def decrypt_3des(key,iv,cipher_path, filetype):
 
 
 if __name__ == '__main__':
-    # encrypt_aes(b"\xech4l\x1f6\x81f}{\x01'\xf1\xea\xf7\x9f", "C:/Users/Ana/Desktop/Git.pdf")
-    # decrypt_aes("5dwkUQDoEPjHgWxIp91eZQ==",b'\xf6>\xf3q\xad\x06\x004\xf8\xd8\xda\xe3\x19\x94Y\xa8',"C:/Users/Ana/Desktop/message.enc","txt")
-    # key = b64decode("beV7e/05MCQcohtT312qGA==")
-    # print(key)
 
-    # pic = open_binary("C:/Users/Ana/Desktop/image.jpg")
-    # write_binary("C:/Users/Ana/Desktop/image1.jpg",pic)
+    start_time = time.time()
+    encrypt_aes(b"\xech4l\x1f6\x81f}{\x01'\xf1\xea\xf7\x9f", "C:/Users/Ana/Desktop/Git.pdf")
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)
 
+    start_time = time.time()
+    decrypt_aes("7Gg0bB82gWZ9ewEn8er3nw==", "QNCVyBQg+f16YfTtzQny1Q==", "C:/Users/Ana/Desktop/Git.enc","pdf")
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)
 
-    # encrypt_salsa20(get_random_bytes(32), "C:/Users/Ana/Desktop/info.txt")
-    # decrypt_salsa20("AUKWKWiAHhEbeFqtzGApfHSg1zT3lRLMqM//0OrKOKA=", b'\xda\xf8\xd62hX\xbb-',"C:/Users/Ana/Desktop/info.enc","txt")
+    start_time = time.time()
+    encrypt_3des("C:/Users/Ana/Desktop/Git.pdf")
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)
 
-    decrypt_3des("0IBh9OmFzYkEkrXyGmieYb+wrWcQp3wv",b'\xdb\x0b\x01_N\x91\x85h',"C:/Users/Ana/Desktop/message.enc","txt")
+    start_time = time.time()
+    decrypt_3des("XjIfRhNMO1QIwgKrulJdCzvZbmJRC0A7", "VZ03NWOEKH0=", "C:/Users/Ana/Desktop/Git.enc","pdf")
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)
+
+    start_time = time.time()
+    encrypt_salsa20(get_random_bytes(32), "C:/Users/Ana/Desktop/Git.pdf")
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)
+
+    start_time = time.time()
+    decrypt_salsa20("ia+yb8f3d2KHA4+59vja8Wkq0kcOLqdK2SHxINRDZrs=", "gXKFVUOSGEg=",
+                    "C:/Users/Ana/Desktop/Git.enc", "pdf")
+    elapsed_time = time.time() - start_time
+    print(elapsed_time)

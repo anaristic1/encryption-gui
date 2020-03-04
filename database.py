@@ -1,6 +1,7 @@
 import sqlite3 as sql
 from base64 import b64encode, b64decode
 
+
 def create_database():
     try:
         connection = sql.connect('data.db')
@@ -27,12 +28,26 @@ def insert(path,algorithm, file_type, key, iv):
         iv = b64encode(iv).decode('utf-8')
         connection = sql.connect('data.db')
         cursor = connection.cursor()
+        sql_command = f"""DELETE FROM data WHERE path="{path}" """
+        cursor.execute(sql_command)
         sql_command= f"""
         INSERT INTO data (id,algorithm, path, filetype, key, iv)
         VALUES(NULL,"{algorithm}","{path}","{file_type}","{key}","{iv}");
         """
         cursor.execute(sql_command)
         connection.commit()
+    except sql.Error as err:
+        print(f"Error: {err.args[0]}")
+    finally:
+        connection.close()
+
+
+def delete_if_exists(path):
+    try:
+        connection = sql.connect('data.db')
+        cursor = connection.cursor()
+        sql_command= f"""DELETE FROM data WHERE path="{path}" """
+        cursor.execute(sql_command)
     except sql.Error as err:
         print(f"Error: {err.args[0]}")
     finally:

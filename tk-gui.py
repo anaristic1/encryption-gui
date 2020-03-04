@@ -26,7 +26,7 @@ def write_in_txt(text, path):
 def choose_file():
     global file_path
 
-    file_path = askopenfilename(filetypes=[("Txt", "*.txt"), ("JPG", "*.jpg"), ("ENC", "*.enc")])
+    file_path = askopenfilename(filetypes=[("Txt", "*.txt"), ("JPG", "*.jpg"), ("ENC", "*.enc"),("PDF", "*.pdf")])
 
     messagebox.showinfo("Error", "No file chosen!") if file_path == "" else message.configure(
         text=f"Chosen file: {get_name()}" if len(get_name()) < 30 else f"{get_type()} file chosen")
